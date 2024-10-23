@@ -1,6 +1,5 @@
 "use server";
 
-
 export const adminLogin = async (username: string, password: string) => {
   try {
     const raw = JSON.stringify({
@@ -8,19 +7,19 @@ export const adminLogin = async (username: string, password: string) => {
       password: password,
     });
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/admin/auth/signin`,
-      {
-        method: "POST",
-        body: raw,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        redirect: "follow",
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+      method: "POST",
+      body: raw,
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      redirect: "follow",
+    });
+    console.log(response);
 
-    const data = await response.text();
+    const data = await response.json();
+
+    console.log(data);
     return { status: response.ok, result: data };
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -42,7 +41,7 @@ export const userLogin = async (username: string, password: string) => {
         headers: {
           "Content-Type": "application/json",
         },
-      },
+      }
     );
 
     if (!response.ok) {
@@ -67,7 +66,7 @@ export const getLoginData = async (token: string) => {
           Authorization: `Bearer ${token}`,
         },
         redirect: "follow",
-      },
+      }
     );
 
     const data = await response.json();

@@ -1,25 +1,26 @@
 "use client";
 import { useRecoilState } from "recoil";
-import { checkedListAtom, newsListAtom, totalPageAtom } from "@/atom";
+import { checkedListAtom, galleryListAtom, totalPageAtom } from "@/atom";
 import { useEffect, useState } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Pagination from "../Pagination/Pagination";
 import CustomModal from "../Modal/Confirm";
-import { deleteNews, getNewsList } from "@/hooks/useEvents";
+import { deleteGallery, getGalleryList } from "@/hooks/useEvents";
 
 import { FiEdit } from "react-icons/fi";
 import Link from "next/link";
 import getToken from "@/helper/getToken";
 import { format } from "date-fns";
-const NewsList = () => {
+const GalleryList = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
+
   const page = searchParams.get("page") !== null ? searchParams.get("page") : 1;
   const size = 20;
   const [totalPage, setTotalPage] = useRecoilState(totalPageAtom);
   const pageUrl = `${pathname}?id=0`;
   const [isOpen, setIsOpen] = useState(false);
-  const [itemsList, setItemsList] = useRecoilState(newsListAtom);
+  const [itemsList, setItemsList] = useRecoilState(galleryListAtom);
   const [checkedElements, setChechedElements] = useRecoilState(checkedListAtom);
   const openModal = () => {
     setIsOpen(true);
@@ -30,9 +31,8 @@ const NewsList = () => {
   };
 
   const userDelete = async () => {
-    const userToken = getToken();
     checkedElements.forEach(async (element) => {
-      await deleteNews(String(userToken), Number(element));
+      await deleteGallery(Number(element));
     });
     getData();
     setChechedElements([]);
@@ -58,7 +58,7 @@ const NewsList = () => {
 
   const getData = async () => {
     const userToken = getToken();
-    const response = await getNewsList(
+    const response = await getGalleryList(
       String(userToken),
       Number(page),
       Number(size)
@@ -80,7 +80,7 @@ const NewsList = () => {
         <div className="col-span-7 w-full  text-right max-md:col-span-12 ">
           <div className="flex w-full  justify-end gap-4">
             <Link
-              href={"/news/create"}
+              href={"/gallery/create"}
               className="inline-flex items-center justify-center rounded-md bg-primary px-5 py-2 text-center text-[15px] font-medium text-white hover:bg-opacity-90"
             >
               Create
@@ -97,7 +97,7 @@ const NewsList = () => {
           {isOpen ? (
             <CustomModal>
               <h2 className="text-xl text-black">
-                ({checkedElements?.length}) News will <br /> be deleted
+                ({checkedElements?.length}) Gallery will <br /> be deleted
               </h2>
               <div className="mb-2 mt-4 text-lg text-black">
                 Are you sure you want to <br />
@@ -229,9 +229,9 @@ const NewsList = () => {
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-4  dark:border-strokedark ">
-                  {Number(item?.boardFile?.length) > 0 && (
+                  {Number(item?.galleryFile?.length) > 0 && (
                     <img
-                      src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${item?.boardFile[0]?.file_name}.${item?.boardFile[0]?.file_ext}`}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${item?.galleryFile[0]?.file_name}.${item?.galleryFile[0]?.file_ext}`}
                       contextMenu="false"
                       alt={item?.title}
                       className="max-w-[140px] max-h-[40px]  "
@@ -250,7 +250,7 @@ const NewsList = () => {
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-xl font-medium bg-success text-primary `}
                   >
-                    <Link href={`/news/${item?.id}`}>
+                    <Link href={`/gallery/${item?.id}`}>
                       <FiEdit className="text-[17px]" />
                     </Link>
                     {/* <RiSearchLine /> */}
@@ -272,4 +272,4 @@ const NewsList = () => {
   );
 };
 
-export default NewsList;
+export default GalleryList;

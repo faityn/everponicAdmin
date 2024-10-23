@@ -8,14 +8,14 @@ import { useRecoilState } from "recoil";
 import CustomModal from "../Modal/Confirm";
 import { useState } from "react";
 import Loader from "../common/Loader";
-import { createNews } from "@/hooks/useEvents";
+import { createGallery } from "@/hooks/useEvents";
 import TextEditor from "../Editor/TextEditor";
 
 interface FormData {
   title: string;
   image?: string;
 }
-const NewsCreate = () => {
+const GalleryCreate = () => {
   const router = useRouter();
   const [file1, setFile1] = useRecoilState(fileAtom);
   const [loading, setLoading] = useState<boolean>(false);
@@ -32,7 +32,7 @@ const NewsCreate = () => {
 
   const closeModal = () => {
     setIsOpen(false);
-    router.push(`/news`);
+    router.push(`/gallery`);
   };
 
   const closeError = () => {
@@ -56,7 +56,7 @@ const NewsCreate = () => {
       if (file1 !== null) {
         formdata.append("img", file1);
       }
-      const res = await createNews(formdata);
+      const res = await createGallery(formdata);
       if (res?.status) {
         setIsOpen(true);
         setLoading(false);
@@ -151,7 +151,7 @@ const NewsCreate = () => {
             </table>
             <div className="flex w-full justify-end gap-4 px-4 text-center">
               <Link
-                href={"/news"}
+                href={"/gallery"}
                 className="inline-flex w-26 items-center justify-center rounded-md border border-primary p-2 text-center font-medium text-primary hover:bg-opacity-90 "
               >
                 Cancel
@@ -169,7 +169,7 @@ const NewsCreate = () => {
       <div className="my-5 text-right">
         {isOpen ? (
           <CustomModal>
-            <h2 className="text-xl text-black"> News Create </h2>
+            <h2 className="text-xl text-black"> Gallery Create </h2>
             <div className="mb-2 mt-4 text-lg text-green-600">
               Saved successfully
             </div>
@@ -187,7 +187,7 @@ const NewsCreate = () => {
         )}
         {createError ? (
           <CustomModal>
-            <h2 className="text-xl text-black"> News Create </h2>
+            <h2 className="text-xl text-black"> Gallery Create </h2>
             <div className="mb-2 mt-4 text-lg text-red">Error!!</div>
             <div className="flex w-full items-center justify-center gap-4">
               <button
@@ -207,4 +207,4 @@ const NewsCreate = () => {
   );
 };
 
-export default NewsCreate;
+export default GalleryCreate;
