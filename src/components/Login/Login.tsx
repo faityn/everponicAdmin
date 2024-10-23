@@ -5,7 +5,6 @@ import { CiLock } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { adminLogin } from "@/hooks/useUser";
-import { encrypt } from "@/helper/utility";
 import Loader from "../common/Loader";
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -16,16 +15,16 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoader(true);
-    const encryptedPass = encrypt(password);
 
-    const response = await adminLogin(username, String(encryptedPass));
+    const response = await adminLogin(username, String(password));
 
     if (!response?.status) {
       setLoader(false);
       setError("Wrong username or password");
     } else {
       setError("");
-      const token = response?.result;
+      const token = response?.result?.responseObject?.token;
+      console.log(token);
 
       const expires = new Date();
       expires.setMonth(expires.getMonth() + 1);

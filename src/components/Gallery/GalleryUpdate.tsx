@@ -1,5 +1,5 @@
 "use client";
-import { fileAtom, newsDetailAtom } from "@/atom";
+import { fileAtom, galleryDetailAtom } from "@/atom";
 import getToken from "@/helper/getToken";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,7 +8,7 @@ import { useRecoilState } from "recoil";
 import CustomModal from "../Modal/Confirm";
 import { useEffect, useState } from "react";
 import Loader from "../common/Loader";
-import { getNewsDetail, updateNews } from "@/hooks/useEvents";
+import { getGalleryDetail, updateGallery } from "@/hooks/useEvents";
 import NotFound from "../common/NotFound";
 import TextEditor from "../Editor/TextEditor";
 
@@ -19,14 +19,14 @@ interface FormData {
   title: string;
   image?: string;
 }
-const NewsUpdate = ({ id }: Props) => {
+const GalleryUpdate = ({ id }: Props) => {
   const router = useRouter();
   const [file1, setFile1] = useRecoilState(fileAtom);
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState(false);
   const [createError, setCreateError] = useState(false);
   const [notFound, setNotFound] = useState(false);
-  const [itemsDetail, setItemsDetail] = useRecoilState(newsDetailAtom);
+  const [itemsDetail, setItemsDetail] = useRecoilState(galleryDetailAtom);
   const [contentValue, setContentValue] = useState("");
   const [contentRequired, setContentRequired] = useState(false);
 
@@ -43,7 +43,7 @@ const NewsUpdate = ({ id }: Props) => {
 
   const getData = async () => {
     const userToken = getToken();
-    const response = await getNewsDetail(String(userToken), id);
+    const response = await getGalleryDetail(String(userToken), id);
 
     if (response?.status) {
       setContentValue(response?.result?.responseObject?.content);
@@ -55,7 +55,7 @@ const NewsUpdate = ({ id }: Props) => {
 
   const closeModal = () => {
     setIsOpen(false);
-    router.push(`/news`);
+    router.push(`/gallery`);
   };
 
   const closeError = () => {
@@ -80,7 +80,7 @@ const NewsUpdate = ({ id }: Props) => {
       if (file1 !== null) {
         formdata.append("img", file1);
       }
-      const res = await updateNews(formdata, id);
+      const res = await updateGallery(formdata, id);
       if (res?.status) {
         setIsOpen(true);
         setLoading(false);
@@ -161,11 +161,11 @@ const NewsUpdate = ({ id }: Props) => {
                       </td>
                       <td className=" border-[#eee] px-4 py-3 dark:border-strokedark ">
                         Current image{" "}
-                        {item?.boardFile.length > 0 && (
+                        {Number(item?.galleryFile?.length) > 0 && (
                           <div className="mb-3">
-                            {item?.boardFile[0]?.file_name}
+                            {item?.galleryFile[0]?.file_name}
                             <img
-                              src={`${item?.boardFile[0]?.file_name}`}
+                              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${item?.galleryFile[0]?.file_name}.${item?.galleryFile[0]?.file_ext}`}
                               contextMenu="false"
                               alt={item?.title}
                               className="max-w-[400px] max-h-[300px]  "
@@ -186,7 +186,7 @@ const NewsUpdate = ({ id }: Props) => {
                 </table>
                 <div className="flex w-full justify-end gap-4 px-4 text-center">
                   <Link
-                    href={"/news"}
+                    href={"/gallery"}
                     className="inline-flex w-26 items-center justify-center rounded-md border border-primary p-2 text-center font-medium text-primary hover:bg-opacity-90 "
                   >
                     Cancel
@@ -205,7 +205,7 @@ const NewsUpdate = ({ id }: Props) => {
       <div className="my-5 text-right">
         {isOpen ? (
           <CustomModal>
-            <h2 className="text-xl text-black"> News </h2>
+            <h2 className="text-xl text-black"> Gallery </h2>
             <div className="mb-2 mt-4 text-lg text-green-600">
               Saved successfully
             </div>
@@ -223,7 +223,7 @@ const NewsUpdate = ({ id }: Props) => {
         )}
         {createError ? (
           <CustomModal>
-            <h2 className="text-xl text-black"> News Create </h2>
+            <h2 className="text-xl text-black"> Gallery Create </h2>
             <div className="mb-2 mt-4 text-lg text-red">Error!!</div>
             <div className="flex w-full items-center justify-center gap-4">
               <button
@@ -243,4 +243,4 @@ const NewsUpdate = ({ id }: Props) => {
   );
 };
 
-export default NewsUpdate;
+export default GalleryUpdate;

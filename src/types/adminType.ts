@@ -14,7 +14,6 @@ export type AdminType = {
   created_at?: string;
 };
 
-
 export type BannerType = {
   id?: number;
   title?: string;
@@ -24,7 +23,6 @@ export type BannerType = {
   createdAt?: string;
   updatedAt?: string;
 };
-
 
 export type MenuItem = {
   menuId: number;
@@ -36,14 +34,44 @@ export type SearchOptionsType = {
     {
       value?: string;
       text?: string;
-    },
+    }
   ];
   status?: [
     {
       value?: string;
       text?: string;
-    },
+    }
   ];
 };
 
+export type NewsType = {
+  id?: number;
+  title?: string;
+  content?: string;
+  boardFile: [
+    {
+      id?: number;
+      file_name?: string;
+      file_ext?: string;
+    }
+  ];
 
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type GalleryType = {
+  id?: number;
+  title?: string;
+  content?: string;
+  galleryFile: [
+    {
+      id?: number;
+      file_name?: string;
+      file_ext?: string;
+    }
+  ];
+
+  createdAt?: string;
+  updatedAt?: string;
+};

@@ -1,14 +1,10 @@
 import {
-
-
   AdminType,
-
   BannerType,
-  
+  GalleryType,
   MenuItem,
-  
+  NewsType,
   SearchOptionsType,
-  
 } from "@/types/adminType";
 
 import { atom } from "recoil";
@@ -17,7 +13,6 @@ export const adminAllListAtom = atom<AdminType[]>({
   key: "admin_list_atom",
   default: [],
 });
-
 
 export const checkedListAtom = atom<string[]>({
   key: "checked_list_atom",
@@ -74,8 +69,6 @@ export const bannerDetailAtom = atom<BannerType[]>({
   default: [],
 });
 
-
-
 export const adminMenuItemAtom = atom<MenuItem[]>({
   key: "adminMenuItemAtom",
   default: [],
@@ -119,7 +112,6 @@ export const optionProfessionAtom = atom({
   default: "",
 });
 
-
 export const checkedInterestAtom = atom<string[]>({
   key: "checkedInterestAtom",
   default: [],
@@ -138,4 +130,24 @@ export const dataSavedAtom = atom({
 export const createExOrganizerOpenAtom = atom({
   key: "createExOrganizerOpenAtom",
   default: false,
+});
+
+export const newsListAtom = atom<NewsType[]>({
+  key: "newsListAtom",
+  default: [],
+});
+
+export const newsDetailAtom = atom<NewsType[]>({
+  key: "newsDetailAtom",
+  default: [],
+});
+
+export const galleryListAtom = atom<GalleryType[]>({
+  key: "galleryListAtom",
+  default: [],
+});
+
+export const galleryDetailAtom = atom<GalleryType[]>({
+  key: "galleryDetailAtom",
+  default: [],
 });
