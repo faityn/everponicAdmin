@@ -1,6 +1,7 @@
 import {
   AdminType,
   BannerType,
+  FaqType,
   GalleryType,
   MenuItem,
   NewsType,
@@ -149,5 +150,15 @@ export const galleryListAtom = atom<GalleryType[]>({
 
 export const galleryDetailAtom = atom<GalleryType[]>({
   key: "galleryDetailAtom",
+  default: [],
+});
+
+export const faqListAtom = atom<FaqType[]>({
+  key: "faqListAtom",
+  default: [],
+});
+
+export const faqDetailAtom = atom<FaqType[]>({
+  key: "faqDetailAtom",
   default: [],
 });

@@ -163,9 +163,8 @@ const NewsUpdate = ({ id }: Props) => {
                         Current image{" "}
                         {item?.boardFile.length > 0 && (
                           <div className="mb-3">
-                            {item?.boardFile[0]?.file_name}
                             <img
-                              src={`${item?.boardFile[0]?.file_name}`}
+                              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${item?.boardFile[0]?.file_name}`}
                               contextMenu="false"
                               alt={item?.title}
                               className="max-w-[400px] max-h-[300px]  "

@@ -231,10 +231,9 @@ const GalleryList = () => {
                 <td className="border-b border-[#eee] px-4 py-4  dark:border-strokedark ">
                   {Number(item?.galleryFile?.length) > 0 && (
                     <img
-                      src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${item?.galleryFile[0]?.file_name}.${item?.galleryFile[0]?.file_ext}`}
-                      contextMenu="false"
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${item?.galleryFile[0]?.file_name}`}
                       alt={item?.title}
-                      className="max-w-[140px] max-h-[40px]  "
+                      className="max-w-[140px] max-h-[60px]  "
                     />
                   )}
                 </td>

@@ -4,8 +4,8 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import NewsList from "@/components/News/NewsList";
 
 export const metadata: Metadata = {
-  title: "Lound | Admin page",
-  description: "Lound Admin page",
+  title: "Everponic | Admin page",
+  description: "Everponic Admin page",
   icons: "/images/logo_head_mini_black.svg",
 };
 
@@ -15,7 +15,7 @@ export default function Home() {
       <DefaultLayout allowedRoles={["Super Admin", "Admin"]}>
         <Breadcrumb parentName="News Manage" pageName="News List" />
         <div className="flex flex-col gap-10">
-          <NewsList  />
+          <NewsList />
         </div>
       </DefaultLayout>
     </>
