@@ -53,6 +53,7 @@ export type NewsType = {
       id?: number;
       file_name?: string;
       file_ext?: string;
+      file_loc?: string;
     }
   ];
 
@@ -72,6 +73,18 @@ export type GalleryType = {
     }
   ];
 
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type FaqType = {
+  id?: number;
+  title?: string;
+  name?: string;
+  email?: string;
+  message?: string;
+  answer?: string;
+  isreplied?: boolean;
   createdAt?: string;
   updatedAt?: string;
 };

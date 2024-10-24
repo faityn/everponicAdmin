@@ -4,7 +4,7 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import NewsCreate from "@/components/News/NewsCreate";
 
 export const metadata: Metadata = {
-  title: "Lound | Admin page - News Manage",
+  title: "Everponic | Admin page - News Manage",
   icons: "/images/favicon.ico",
 };
 

@@ -1,5 +1,5 @@
 "use client";
-import { fileAtom, galleryDetailAtom } from "@/atom";
+import { faqDetailAtom } from "@/atom";
 import getToken from "@/helper/getToken";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,32 +8,27 @@ import { useRecoilState } from "recoil";
 import CustomModal from "../Modal/Confirm";
 import { useEffect, useState } from "react";
 import Loader from "../common/Loader";
-import { getGalleryDetail, updateGallery } from "@/hooks/useEvents";
+import { answerFaq, getFaqDetail } from "@/hooks/useEvents";
 import NotFound from "../common/NotFound";
 import TextEditor from "../Editor/TextEditor";
 
 interface Props {
   id: number;
 }
-interface FormData {
-  title: string;
-  image?: string;
-}
-const GalleryUpdate = ({ id }: Props) => {
+
+const FaqUpdate = ({ id }: Props) => {
   const router = useRouter();
-  const [file1, setFile1] = useRecoilState(fileAtom);
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState(false);
   const [createError, setCreateError] = useState(false);
   const [notFound, setNotFound] = useState(false);
-  const [itemsDetail, setItemsDetail] = useRecoilState(galleryDetailAtom);
+  const [itemsDetail, setItemsDetail] = useRecoilState(faqDetailAtom);
   const [contentValue, setContentValue] = useState("");
   const [contentRequired, setContentRequired] = useState(false);
 
   const {
-    register,
     handleSubmit,
-    formState: { errors },
+    formState: {},
   } = useForm<FormData>();
 
   useEffect(() => {
@@ -43,7 +38,7 @@ const GalleryUpdate = ({ id }: Props) => {
 
   const getData = async () => {
     const userToken = getToken();
-    const response = await getGalleryDetail(String(userToken), id);
+    const response = await getFaqDetail(String(userToken), id);
 
     if (response?.status) {
       setContentValue(response?.result?.responseObject?.content);
@@ -55,7 +50,7 @@ const GalleryUpdate = ({ id }: Props) => {
 
   const closeModal = () => {
     setIsOpen(false);
-    router.push(`/gallery`);
+    router.push(`/faq`);
   };
 
   const closeError = () => {
@@ -66,21 +61,14 @@ const GalleryUpdate = ({ id }: Props) => {
     setContentValue(newContent);
   };
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    if (contentValue === "") {
+  const onSubmit: SubmitHandler<FormData> = async () => {
+    if (contentValue === undefined) {
       setContentRequired(true);
     } else {
       setLoading(true);
-      const token = getToken();
-      const formdata = new FormData();
-      formdata.append("token", String(token));
-      formdata.append("id", String(id));
-      formdata.append("title", data.title ? data.title : "");
-      formdata.append("content", contentValue);
-      if (file1 !== null) {
-        formdata.append("img", file1);
-      }
-      const res = await updateGallery(formdata, id);
+      const answer = contentValue;
+
+      const res = await answerFaq(answer, id);
       if (res?.status) {
         setIsOpen(true);
         setLoading(false);
@@ -90,15 +78,6 @@ const GalleryUpdate = ({ id }: Props) => {
       }
     }
   };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleFileChange1 = (e: any) => {
-    const newFile = e.target.files[0];
-
-    setFile1(newFile);
-  };
-
-  useEffect(() => {}, [itemsDetail]);
 
   return (
     <div className="rounded-sm border border-stroke bg-white  pb-2.5 pt-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-4 xl:pb-1">
@@ -113,30 +92,59 @@ const GalleryUpdate = ({ id }: Props) => {
                     <tr>
                       <td className=" min-w-[130px] max-w-[160px] border-[#eee] px-4 py-3 dark:border-strokedark ">
                         <h5 className="font-medium text-black dark:text-white">
+                          Name
+                        </h5>
+                      </td>
+                      <td className=" border-[#eee] px-4 py-3 dark:border-strokedark ">
+                        <div className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
+                          {item?.name}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className=" min-w-[130px] max-w-[160px] border-[#eee] px-4 py-3 dark:border-strokedark ">
+                        <h5 className="font-medium text-black dark:text-white">
+                          Email
+                        </h5>
+                      </td>
+                      <td className=" border-[#eee] px-4 py-3 dark:border-strokedark ">
+                        <div className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
+                          {item?.email}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className=" min-w-[130px] max-w-[160px] border-[#eee] px-4 py-3 dark:border-strokedark ">
+                        <h5 className="font-medium text-black dark:text-white">
                           Title
                         </h5>
                       </td>
                       <td className=" border-[#eee] px-4 py-3 dark:border-strokedark ">
-                        <input
-                          type="text"
-                          {...register("title", {
-                            required: true,
-                          })}
-                          defaultValue={item?.title}
-                          placeholder="Enter title"
-                          className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                        />
-                        {errors.title && (
-                          <span className="font-medium text-red ">
-                            This field is required
-                          </span>
-                        )}
+                        <div className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
+                          {item?.title}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className=" min-w-[130px] max-w-[160px] border-[#eee] px-4 py-3 dark:border-strokedark ">
+                        <h5 className="font-medium text-black dark:text-white">
+                          Answer
+                        </h5>
+                      </td>
+                      <td className=" border-[#eee] px-4 py-3 dark:border-strokedark ">
+                        <div className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: String(item?.answer),
+                            }}
+                          ></div>
+                        </div>
                       </td>
                     </tr>
                     <tr>
                       <td className="min-w-[200px] border-[#eee] px-4 py-3 dark:border-strokedark ">
                         <h5 className="font-medium text-black dark:text-white">
-                          Desc
+                          Insert Answer
                         </h5>
                       </td>
                       <td className=" border-[#eee] px-4 py-3 dark:border-strokedark ">
@@ -153,39 +161,11 @@ const GalleryUpdate = ({ id }: Props) => {
                         )}
                       </td>
                     </tr>
-                    <tr>
-                      <td className="  border-[#eee] px-4 py-3 dark:border-strokedark ">
-                        <h5 className="font-medium text-black dark:text-white">
-                          Image
-                        </h5>
-                      </td>
-                      <td className=" border-[#eee] px-4 py-3 dark:border-strokedark ">
-                        Current image{" "}
-                        {Number(item?.galleryFile?.length) > 0 && (
-                          <div className="mb-3">
-                            <img
-                              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${item?.galleryFile[0]?.file_name}`}
-                              contextMenu="false"
-                              alt={item?.title}
-                              className="max-w-[400px] max-h-[300px]  "
-                            />
-                          </div>
-                        )}
-                        <div className="rounded-sm  ">
-                          <input
-                            {...register("image")}
-                            type="file"
-                            className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:px-5 file:py-3 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
-                            onChange={handleFileChange1}
-                          />
-                        </div>
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
                 <div className="flex w-full justify-end gap-4 px-4 text-center">
                   <Link
-                    href={"/gallery"}
+                    href={"/faq"}
                     className="inline-flex w-26 items-center justify-center rounded-md border border-primary p-2 text-center font-medium text-primary hover:bg-opacity-90 "
                   >
                     Cancel
@@ -194,7 +174,7 @@ const GalleryUpdate = ({ id }: Props) => {
                     type="submit"
                     className="flex w-26 justify-center rounded bg-primary p-2 font-medium text-gray hover:bg-opacity-90"
                   >
-                    Save
+                    Answer
                   </button>
                 </div>
               </form>
@@ -242,4 +222,4 @@ const GalleryUpdate = ({ id }: Props) => {
   );
 };
 
-export default GalleryUpdate;
+export default FaqUpdate;
