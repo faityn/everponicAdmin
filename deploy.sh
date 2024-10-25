@@ -1,5 +1,5 @@
 git pull
 npm install -f
 npm run build
-pm2 delete everponicadmin
-pm2 start npm --name everponicadmin -- start
+pm2 delete everponicAdmin
+pm2 start npm --name everponicAdmin -- start
