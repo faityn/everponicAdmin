@@ -4,6 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { RecoilRoot } from "recoil";
 import getRole from "@/helper/getRole";
+import { useRouter } from "next/navigation";
 interface WithRoleProps {
   children: ReactNode;
   allowedRoles: string[];
@@ -13,12 +14,18 @@ export default function DefaultLayout({
   children,
   allowedRoles,
 }: WithRoleProps) {
+  const router = useRouter();
   const [userRole, setUserRole] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const getAdminRole = async () => {
     const role = await getRole();
-    setUserRole(String(role));
+
+    if (role === null) {
+      router.push("/login");
+    } else {
+      setUserRole(String(role));
+    }
   };
   useEffect(() => {
     //eslint-disable-next-line react-hooks/exhaustive-deps

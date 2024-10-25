@@ -24,7 +24,6 @@ const Login: React.FC = () => {
     } else {
       setError("");
       const token = response?.result?.responseObject?.token;
-      console.log(token);
 
       const expires = new Date();
       expires.setMonth(expires.getMonth() + 1);
