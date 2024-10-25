@@ -4,8 +4,8 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import GalleryUpdate from "@/components/Gallery/GalleryUpdate";
 
 export const metadata: Metadata = {
-  title: "Lound | Admin page - Gallery Manage",
-  icons: "/images/favicon.ico",
+  title: "Everponic | Admin page - Gallery Manage",
+  icons: "/images/logo_head_mini_black.svg",
 };
 
 interface NewsPageProps {

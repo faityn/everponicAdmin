@@ -1,29 +1,23 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import NewsUpdate from "@/components/News/NewsUpdate";
+import CareersCreate from "@/components/Careers/CareersCreate";
 
 export const metadata: Metadata = {
   title: "Everponic | Admin page - News Manage",
   icons: "/images/logo_head_mini_black.svg",
 };
 
-interface NewsPageProps {
-  params: {
-    id: number;
-  };
-}
-
-const NewsUpdatePage: React.FC<NewsPageProps> = ({ params }) => {
+const CareersCreatePage = () => {
   return (
     <DefaultLayout allowedRoles={["Super Admin"]}>
-      <Breadcrumb parentName="News Manage" pageName="News Update" />
+      <Breadcrumb parentName="Careers Manage" pageName="Careers Create" />
 
       <div className="flex flex-col gap-10">
-        <NewsUpdate id={params.id} />
+        <CareersCreate />
       </div>
     </DefaultLayout>
   );
 };
 
-export default NewsUpdatePage;
+export default CareersCreatePage;

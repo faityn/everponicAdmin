@@ -4,8 +4,8 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import FaqList from "@/components/Faq/FaqList";
 
 export const metadata: Metadata = {
-  title: "Lound | Admin page - FAQ Manage",
-  icons: "/images/favicon.ico",
+  title: "Everponic | Admin page - FAQ Manage",
+  icons: "/images/logo_head_mini_black.svg",
 };
 
 const FaqPage = () => {
