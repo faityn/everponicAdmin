@@ -5,7 +5,7 @@ import NewsCreate from "@/components/News/NewsCreate";
 
 export const metadata: Metadata = {
   title: "Everponic | Admin page - News Manage",
-  icons: "/images/favicon.ico",
+  icons: "/images/logo_head_mini_black.svg",
 };
 
 const NewsCreatePage = () => {

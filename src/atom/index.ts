@@ -1,6 +1,7 @@
 import {
   AdminType,
   BannerType,
+  CareersType,
   FaqType,
   GalleryType,
   MenuItem,
@@ -160,5 +161,15 @@ export const faqListAtom = atom<FaqType[]>({
 
 export const faqDetailAtom = atom<FaqType[]>({
   key: "faqDetailAtom",
+  default: [],
+});
+
+export const careersListAtom = atom<CareersType[]>({
+  key: "careersListAtom",
+  default: [],
+});
+
+export const careersDetailAtom = atom<CareersType[]>({
+  key: "careersDetailAtom",
   default: [],
 });

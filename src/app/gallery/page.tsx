@@ -4,8 +4,8 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import GalleryList from "@/components/Gallery/GalleryList";
 
 export const metadata: Metadata = {
-  title: "Lound | Admin page - Gallery Manage",
-  icons: "/images/favicon.ico",
+  title: "Everponic | Admin page - Gallery Manage",
+  icons: "/images/logo_head_mini_black.svg",
 };
 
 const GalleryPage = () => {

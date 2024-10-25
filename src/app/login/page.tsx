@@ -3,8 +3,8 @@ import AuthLayout from "@/components/Layouts/AuthLayout";
 import Login from "@/components/Login/Login";
 
 export const metadata: Metadata = {
-  title: "Lound | Admin page - Login",
-  icons: "/images/favicon.ico",
+  title: "Everponic | Admin page - Login",
+  icons: "/images/logo_head_mini_black.svg",
 };
 
 const LoginPage = () => {

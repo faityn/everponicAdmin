@@ -88,3 +88,20 @@ export type FaqType = {
   createdAt?: string;
   updatedAt?: string;
 };
+
+export type CareersType = {
+  id?: number;
+  title?: string;
+  outlink?: string;
+  careersFile: [
+    {
+      id?: number;
+      file_name?: string;
+      file_ext?: string;
+      file_loc?: string;
+    }
+  ];
+
+  createdAt?: string;
+  updatedAt?: string;
+};

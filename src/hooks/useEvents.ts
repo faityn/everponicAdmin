@@ -330,7 +330,6 @@ export const getExhibitionLectureDetail = async (token: string, id: number) => {
         redirect: "follow",
       }
     );
-    console.log(response);
 
     const data = await response.json();
 
@@ -549,7 +548,7 @@ export const getNewsList = async (
     );
 
     const data = await response.json();
-    console.log(data);
+
     return { status: response.ok, result: data };
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -578,7 +577,6 @@ export const createNews = async (formdata: FormData) => {
         redirect: "follow",
       }
     );
-    console.log(response);
 
     const data = await response.json();
     return { status: response.ok, result: data };
@@ -852,6 +850,128 @@ export const deleteFaq = async (id: number) => {
       {
         method: "DELETE",
 
+        redirect: "follow",
+      }
+    );
+
+    const data = await response.text();
+    return { status: response.ok, result: data };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const getCareersList = async (
+  token: string,
+  page: number,
+  size: number
+) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/careers/list?page=${page}&limit=${size}&order=newest`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: "follow",
+      }
+    );
+
+    const data = await response.json();
+
+    return { status: response.ok, result: data };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const createCareers = async (formdata: FormData) => {
+  const image: File | null = (formdata.get("img") as unknown) as File;
+  const formData2 = new FormData();
+  const token = formdata.get("token") as string;
+  formData2.append("title", formdata.get("title") as string);
+  formData2.append("outlink", formdata.get("outlink") as string);
+
+  if (image !== null) {
+    formData2.append("image", image);
+  }
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/careers`, {
+      method: "POST",
+      body: formData2,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    });
+
+    const data = await response.json();
+    return { status: response.ok, result: data };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const deleteCareers = async (id: number) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/careers/${id}`,
+      {
+        method: "DELETE",
+
+        redirect: "follow",
+      }
+    );
+    const data = await response.text();
+    return { status: response.ok, result: data };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const getCareersDetail = async (token: string, id: number) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/careers/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: "follow",
+      }
+    );
+    const data = await response.json();
+
+    return { status: response.ok, result: data };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const updateCareers = async (formdata: FormData, id: number) => {
+  const image: File | null = (formdata.get("img") as unknown) as File;
+  const formData2 = new FormData();
+  const token = formdata.get("token") as string;
+
+  formData2.append("title", formdata.get("title") as string);
+  formData2.append("outlink", formdata.get("outlink") as string);
+
+  if (image !== null) {
+    formData2.append("image", image);
+  }
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/careers/${id}`,
+      {
+        method: "PUT",
+        body: formData2,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         redirect: "follow",
       }
     );
