@@ -38,14 +38,14 @@ const Login: React.FC = () => {
     }
   };
   return (
-    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark max-w-150 mx-auto">
+    <div className="mx-auto max-w-150 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex flex-wrap items-center ">
-        <div className=" border-stroke dark:border-strokedark w-full ">
+        <div className=" w-full border-stroke dark:border-strokedark ">
           <div className="w-full p-4 sm:p-12.5 xl:p-17.5 xl:py-12">
-            <div className=" w-full flex justify-center"></div>
-            <h2 className="mb-9 text-xl font-bold text-black dark:text-white sm:text-title-md mt-5 text-center">
-              Sign In to <span className="text-3xl text-primary">Lound</span>{" "}
-              dashboard
+            <div className=" flex w-full justify-center"></div>
+            <h2 className="mb-9 mt-5 text-center text-xl font-bold text-black dark:text-white sm:text-title-md">
+              Sign In to{" "}
+              <span className="text-3xl text-primary">Everponic</span> dashboard
             </h2>
             <div className="w-full text-center text-red">{error}</div>
             <form onSubmit={handleSubmit}>
