@@ -1,4 +1,5 @@
 import {
+  AdminsType,
   AdminType,
   BannerType,
   CareersType,
@@ -171,5 +172,15 @@ export const careersListAtom = atom<CareersType[]>({
 
 export const careersDetailAtom = atom<CareersType[]>({
   key: "careersDetailAtom",
+  default: [],
+});
+
+export const adminListAtom = atom<AdminsType[]>({
+  key: "adminListAtom",
+  default: [],
+});
+
+export const adminDetailAtom = atom<AdminsType[]>({
+  key: "adminDetailAtom",
   default: [],
 });

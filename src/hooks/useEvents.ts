@@ -982,3 +982,120 @@ export const updateCareers = async (formdata: FormData, id: number) => {
     console.error("Error fetching data:", error);
   }
 };
+
+export const getAdminList = async (token: string) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    });
+
+    const data = await response.json();
+
+    return { status: response.ok, result: data };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const createAdmin = async (
+  token: string,
+  username: string,
+  password: string
+) => {
+  try {
+    const raw = JSON.stringify({
+      username: username,
+      password: password,
+    });
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+      method: "POST",
+      body: raw,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      redirect: "follow",
+    });
+
+    const data = await response.json();
+    return { status: response.ok, result: data };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const getAdminDetail = async (token: string, id: number) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: "follow",
+      }
+    );
+    const data = await response.json();
+
+    return { status: response.ok, result: data };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const updateAdmin = async (
+  token: string,
+  id: number,
+  username: string,
+  password: string
+) => {
+  try {
+    const raw = JSON.stringify({
+      username: username,
+      password: password,
+    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/${id}`,
+      {
+        method: "POST",
+        body: raw,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        redirect: "follow",
+      }
+    );
+    console.log(response);
+
+    const data = await response.text();
+    return { status: response.ok, result: data };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export const deleteAdmin = async (id: number) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/${id}`,
+      {
+        method: "DELETE",
+
+        redirect: "follow",
+      }
+    );
+    const data = await response.text();
+    return { status: response.ok, result: data };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
