@@ -105,3 +105,14 @@ export type CareersType = {
   createdAt?: string;
   updatedAt?: string;
 };
+
+export type AdminsType = {
+  id?: number;
+  name?: string;
+  username?: string;
+  email?: string;
+
+  password?: string;
+
+  created_at?: string;
+};
