@@ -1065,7 +1065,7 @@ export const updateAdmin = async (
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/users/${id}`,
       {
-        method: "POST",
+        method: "PUT",
         body: raw,
         headers: {
           "Content-Type": "application/json",
@@ -1083,16 +1083,21 @@ export const updateAdmin = async (
   }
 };
 
-export const deleteAdmin = async (id: number) => {
+export const deleteAdmin = async (token: string, id: number) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/users/${id}`,
       {
         method: "DELETE",
-
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         redirect: "follow",
       }
     );
+
+    console.log(response);
+
     const data = await response.text();
     return { status: response.ok, result: data };
   } catch (error) {
