@@ -1,14 +1,52 @@
 "use client";
 import { useRecoilState } from "recoil";
-import { adminListAtom } from "@/atom";
-import { useEffect } from "react";
+import { adminListAtom, checkedListAtom } from "@/atom";
+import { useEffect, useState } from "react";
 
-import { getAdminList } from "@/hooks/useEvents";
+import { deleteAdmin, getAdminList } from "@/hooks/useEvents";
 
 import Link from "next/link";
 import getToken from "@/helper/getToken";
+import { FiEdit } from "react-icons/fi";
+import CustomModal from "../Modal/Confirm";
 const AdminList = () => {
   const [itemsList, setItemsList] = useRecoilState(adminListAtom);
+  const [checkedElements, setChechedElements] = useRecoilState(checkedListAtom);
+  const [isOpen, setIsOpen] = useState(false);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    if (id === "all") {
+      const allIds = itemsList?.map((data) => {
+        return data?.id;
+      });
+      setChechedElements(() =>
+        e.target.checked ? (([...allIds] as unknown) as string[]) : []
+      );
+    } else {
+      setChechedElements((prevChecked) =>
+        e.target.checked
+          ? [...prevChecked, id]
+          : prevChecked.filter((item: string) => item !== id)
+      );
+    }
+  };
+
+  const userDelete = async () => {
+    const userToken = getToken();
+    checkedElements.forEach(async (element) => {
+      await deleteAdmin(String(userToken), Number(element));
+    });
+    getData();
+    setChechedElements([]);
+    setIsOpen(false);
+  };
 
   const getData = async () => {
     const userToken = getToken();
@@ -34,6 +72,41 @@ const AdminList = () => {
             >
               Create
             </Link>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-md disabled:bg-slate-300 bg-rose-400 px-5 py-2 text-center text-[15px] font-medium text-white hover:bg-opacity-90"
+              onClick={openModal}
+              disabled={checkedElements?.length > 0 ? false : true}
+            >
+              Delete
+            </button>
+            {isOpen ? (
+              <CustomModal>
+                <h2 className="text-xl text-black">
+                  ({checkedElements?.length}) Admin will <br /> be deleted
+                </h2>
+                <div className="mb-2 mt-4 text-lg text-black">
+                  Are you sure you want to <br />
+                  delete?
+                </div>
+                <div className="flex w-full items-center justify-center gap-4">
+                  <button
+                    onClick={closeModal}
+                    className="rounded-md bg-slate-500 px-3 py-1 text-white"
+                  >
+                    Cancel{" "}
+                  </button>
+                  <button
+                    onClick={userDelete}
+                    className="rounded-md bg-red px-3 py-1 text-white "
+                  >
+                    Delete{" "}
+                  </button>
+                </div>
+              </CustomModal>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
@@ -41,6 +114,39 @@ const AdminList = () => {
         <table className="w-full table-auto text-sm">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
+              <th className="w-[30px] px-3 py-3 font-medium text-black dark:text-white ">
+                <label
+                  htmlFor="checkboxLabelOne"
+                  className="flex cursor-pointer select-none items-center"
+                >
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      id="checkboxLabelOne"
+                      className="sr-only"
+                      onChange={(e) => handleCheck(e, "all")}
+                      checked={
+                        checkedElements.length === itemsList?.length
+                          ? true
+                          : false
+                      }
+                    />
+                    <div
+                      className={`mr-4 flex h-4 w-4 items-center justify-center rounded border ${
+                        checkedElements.length === itemsList?.length &&
+                        "border-primary bg-gray dark:bg-transparent"
+                      }`}
+                    >
+                      <span
+                        className={`h-2 w-2 rounded-sm ${
+                          checkedElements.length === itemsList?.length &&
+                          "bg-primary"
+                        }`}
+                      ></span>
+                    </div>
+                  </div>
+                </label>
+              </th>
               <th className="min-w-50px] px-4 py-3 font-medium text-black dark:text-white ">
                 #
               </th>
@@ -51,11 +157,47 @@ const AdminList = () => {
               <th className="min-w-[200px] px-4 py-3 font-medium text-black dark:text-white ">
                 Email
               </th>
+              <th className="min-w-[100px] px-4 py-3 font-medium text-black dark:text-white"></th>
             </tr>
           </thead>
           <tbody>
             {itemsList?.map((item, index) => (
               <tr key={index}>
+                <td className="border-b  border-[#eee] px-3 py-4  dark:border-strokedark ">
+                  <label
+                    htmlFor={String(item?.id)}
+                    className="flex cursor-pointer select-none items-center"
+                  >
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        id={String(item?.id)}
+                        className="sr-only"
+                        onChange={(e) =>
+                          handleCheck(e, (item?.id as unknown) as string)
+                        }
+                        checked={checkedElements.includes(
+                          (item?.id as unknown) as string
+                        )}
+                      />
+                      <div
+                        className={`mr-4 flex h-4 w-4 items-center justify-center rounded border ${
+                          checkedElements.includes(
+                            (item?.id as unknown) as string
+                          ) && "border-primary bg-gray dark:bg-transparent"
+                        }`}
+                      >
+                        <span
+                          className={`h-2 w-2 rounded-sm ${
+                            checkedElements.includes(
+                              (item?.id as unknown) as string
+                            ) && "bg-primary"
+                          }`}
+                        ></span>
+                      </div>
+                    </div>
+                  </label>
+                </td>
                 <td className="border-b  border-[#eee] px-4 py-4 dark:border-strokedark ">
                   <h5 className="font-medium text-black dark:text-white">
                     {index + 1}
@@ -69,6 +211,16 @@ const AdminList = () => {
                   <h5 className="font-medium  dark:text-white">
                     {item?.email}
                   </h5>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-4 dark:border-strokedark">
+                  <p
+                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-xl font-medium bg-success text-primary `}
+                  >
+                    <Link href={`/admin/${item?.id}`}>
+                      <FiEdit className="text-[17px]" />
+                    </Link>
+                    {/* <RiSearchLine /> */}
+                  </p>
                 </td>
               </tr>
             ))}
